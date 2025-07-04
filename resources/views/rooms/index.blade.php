@@ -37,6 +37,21 @@
     .filter-btn { font-size: 1rem; padding: 0.5rem 1rem !important; }
     .d-flex.gap-2 { gap: 0.7rem !important; }
 }
+.room-image {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    height: 200px;
+    object-fit: cover;
+}
+.card {
+    border-radius: 0.5rem;
+    min-height: 100%;
+    box-shadow: 0 2px 12px rgba(25,118,210,0.08);
+}
+.status-badge {
+    font-size: 0.95rem;
+    padding: 0.5em 1em;
+}
 </style>
 @endpush
 
@@ -68,46 +83,47 @@
 
 <div class="row" id="rooms-container">
     @forelse($rooms as $room)
-    <div class="col-md-6 col-lg-4 mb-4 room-card" data-status="{{ $room->status }}">
-        <div class="card h-100">
+    <div class="col-12 col-sm-6 col-lg-4 mb-4 d-flex align-items-stretch">
+        <div class="card shadow-sm w-100 h-100" style="background: linear-gradient(135deg, #fffaf4 60%, #f7e9d2 100%); border-radius: 1rem;">
             <div class="position-relative">
-                <img src="{{ asset($room->foto_utama) }}" class="card-img-top room-image" alt="{{ $room->nama_kamar }}">
-                <span class="badge status-badge {{ $room->status === 'tersedia' ? 'bg-success' : 'bg-danger' }}">
+                <span class="badge status-badge position-absolute top-0 end-0 m-2 {{ $room->status === 'tersedia' ? 'bg-success' : 'bg-danger' }}">
                     {{ ucfirst($room->status) }}
                 </span>
             </div>
-            <div class="card-body">
-                <h5 class="card-title">{{ $room->nama_kamar }}</h5>
-               
-                <p class="card-text">{{ Str::limit($room->deskripsi, 100) }}</p>
-                
-                <div class="mb-3">
-                    <strong class="text-primary fs-5">Rp {{ number_format($room->harga_sewa, 0, ',', '.') }}/bulan</strong>
+            <div class="card-body d-flex flex-column">
+                <h4 class="card-title fw-bold text-primary mb-2">
+                    <i class="fas fa-door-open me-2"></i>{{ $room->nama_kamar }}
+                </h4>
+                <p class="card-text small text-muted mb-2">{{ Str::limit($room->deskripsi, 60) }}</p>
+                <div class="mb-2">
+                    <span class="fw-bold text-success fs-6">Rp {{ number_format($room->harga_sewa, 0, ',', '.') }}/bulan</span>
                 </div>
-
                 <div class="mb-3">
-                    <h6 class="text-muted">Fasilitas:</h6>
                     <div class="d-flex flex-wrap gap-1">
                         @foreach(array_slice($room->fasilitas, 0, 3) as $fasilitas)
-                        <span class="badge bg-light text-dark">{{ $fasilitas }}</span>
+                        <span class="badge bg-light text-dark border">{{ $fasilitas }}</span>
                         @endforeach
                         @if(count($room->fasilitas) > 3)
-                        <span class="badge bg-light text-dark">+{{ count($room->fasilitas) - 3 }} lagi</span>
+                        <span class="badge bg-light text-dark border">+{{ count($room->fasilitas) - 3 }} lagi</span>
                         @endif
                     </div>
                 </div>
-                <div class="d-grid gap-2">
-    <a href="{{ route('rooms.show', $room) }}" class="btn btn-primary">
-        <i class="fas fa-eye me-1"></i>Lihat Detail
-    </a>
-    @if($room->status === 'tersedia')
-    <a href="https://wa.me/{{ $room->kontak_whatsapp ?? '6281264609317' }}?text={{ urlencode('Halo kak, saya ingin booking kamar '.$room->nama_kamar.' di kos '.$room->lokasi.'. Masih tersedia? Mohon infonya ya, terima kasih.') }}"
-       class="btn btn-success whatsapp-btn text-center fw-bold" target="_blank">
-        <i class="fab fa-whatsapp me-1"></i>Booking via WhatsApp
-    </a>
-    @endif
-</div>
-
+                <div class="mt-auto d-grid gap-2">
+                    <a href="{{ route('rooms.show', $room) }}" class="btn btn-primary">
+                        <i class="fas fa-eye me-1"></i>Lihat Detail
+                    </a>
+                    @if($room->status === 'tersedia')
+                        @php
+                            $waNumber = '6282180725532';
+                            $pesan = "Halo Admin 👋\n\nSaya tertarik dengan KOS GRAHA kamar *{$room->nama_kamar}* dan ingin melakukan survei lokasi 🏠.\n\nKapan saya bisa berkunjung untuk melihat langsung? 😊\n\nTerima kasih banyak 🙏";
+                            $waMessage = rawurlencode($pesan);
+                            $waLink = "https://api.whatsapp.com/send/?phone={$waNumber}&text={$waMessage}&type=phone_number&app_absent=0";
+                        @endphp
+                        <a href="{{ $waLink }}" class="btn btn-success whatsapp-btn fw-bold" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i>Booking via WhatsApp
+                        </a>
+                    @endif
+                </div>
             </div>
         </div>
     </div>

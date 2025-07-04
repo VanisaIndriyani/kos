@@ -80,6 +80,11 @@
                         <i class="fas fa-sign-in-alt me-2"></i>Masuk
                     </button>
                 </form>
+                <div class="mt-3 text-center">
+                    <a href="/" class="text-muted" style="text-decoration: underline;">
+                        <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
+                    </a>
+                </div>
             </div>
         </div>
         <div class="text-center mt-3 text-muted">

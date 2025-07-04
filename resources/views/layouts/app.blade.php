@@ -125,6 +125,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('gallery.index') }}">
+                            <i class="fas fa-images me-1"></i>Galeri Kos
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('testimonials.index') }}">
                             <i class="fas fa-comment-dots me-1"></i>Testimoni
                         </a>

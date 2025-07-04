@@ -21,7 +21,7 @@ class RoomSeeder extends Seeder
             ['AC', 'WiFi', 'Kasur Springbed']
         ];
 
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 22; $i++) {
             DB::table('rooms')->insert([
                 'nama_kamar' => 'Kamar ' . $i,
                 'deskripsi' => 'Kamar nyaman nomor ' . $i . ' dengan fasilitas lengkap.',

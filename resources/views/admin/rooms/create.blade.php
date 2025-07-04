@@ -10,6 +10,19 @@
     </a>
 </div>
 
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 <div class="card shadow-sm">
     <div class="card-body">
         <form action="{{ route('admin.rooms.store') }}" method="POST" enctype="multipart/form-data">
@@ -43,6 +56,8 @@
                                 @enderror
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
@@ -77,20 +92,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="kontak_whatsapp" class="form-label">Kontak WhatsApp</label>
-                        <input type="text" class="form-control @error('kontak_whatsapp') is-invalid @enderror" id="kontak_whatsapp" name="kontak_whatsapp" value="{{ old('kontak_whatsapp') }}">
-                        @error('kontak_whatsapp')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="kontak_form" class="form-label">Kontak Form</label>
-                        <input type="text" class="form-control @error('kontak_form') is-invalid @enderror" id="kontak_form" name="kontak_form" value="{{ old('kontak_form') }}">
-                        @error('kontak_form')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+                   
                 </div>
                 <div class="col-md-4">
                     <div class="mb-3">
@@ -115,20 +117,6 @@
                         </div>
                         @error('fasilitas')
                             <div class="text-danger small">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="foto_utama" class="form-label">Foto Utama <span class="text-danger">*</span></label>
-                        <input type="file" class="form-control @error('foto_utama') is-invalid @enderror" id="foto_utama" name="foto_utama" accept="image/*" required>
-                        @error('foto_utama')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="foto_tambahan" class="form-label">Foto Tambahan</label>
-                        <input type="file" class="form-control @error('foto_tambahan') is-invalid @enderror" id="foto_tambahan" name="foto_tambahan[]" accept="image/*" multiple>
-                        @error('foto_tambahan')
-                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>

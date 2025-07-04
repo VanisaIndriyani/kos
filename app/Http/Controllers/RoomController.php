@@ -43,54 +43,38 @@ class RoomController extends Controller
                 'nama_kamar' => 'required|string|max:255',
                 'deskripsi' => 'required|string',
                 'harga_sewa' => 'required|numeric|min:0',
-                'status' => 'required|in:tersedia,tidak_tersedia',  // Tambahkan ini
+                'status' => 'required|in:tersedia,tidak_tersedia',
                 'latitude' => 'nullable|string',
                 'longitude' => 'nullable|string',
-                'foto_utama' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'foto_tambahan.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'fasilitas' => 'nullable|array',  // Ubah required menjadi nullable
-                'kontak_whatsapp' => 'nullable|string',  // Ubah required menjadi nullable
-                'kontak_form' => 'nullable|string'
+                'fasilitas' => 'nullable|array',
+                'kontak_whatsapp' => 'nullable|string',
             ]);
-        
+
             $data = $request->only([
-                'nama_kamar', 'deskripsi', 'harga_sewa', 'status',  // Tambahkan status
-                'latitude', 'longitude', 'fasilitas',
-                'kontak_whatsapp', 'kontak_form'
+                'nama_kamar', 'deskripsi', 'harga_sewa', 'status',
+                'latitude', 'longitude', 'fasilitas', 'kontak_whatsapp'
             ]);
-        
+
             // Format nomor WhatsApp ke internasional (62...)
-            if (!empty($data['kontak_whatsapp'])) {  // Ganti isset dengan !empty
+            if (!empty($data['kontak_whatsapp'])) {
                 $wa = preg_replace('/[^0-9]/', '', $data['kontak_whatsapp']);
                 if (substr($wa, 0, 1) === '0') {
                     $wa = '62' . substr($wa, 1);
                 }
                 $data['kontak_whatsapp'] = $wa;
             }
-        
-            // Upload foto utama
-            if ($request->hasFile('foto_utama')) {
-                $fotoUtama = $request->file('foto_utama');
-                $fotoUtamaPath = $fotoUtama->store('rooms', 'public');
-                $data['foto_utama'] = 'storage/' . $fotoUtamaPath;
+
+            // Pastikan fasilitas selalu array
+            if (!isset($data['fasilitas'])) {
+                $data['fasilitas'] = [];
             }
-        
-            // Upload foto tambahan
-            $fotoTambahan = [];
-            if ($request->hasFile('foto_tambahan')) {
-                foreach ($request->file('foto_tambahan') as $foto) {
-                    $fotoPath = $foto->store('rooms', 'public');
-                    $fotoTambahan[] = 'storage/' . $fotoPath;
-                }
-            }
-            $data['foto_tambahan'] = $fotoTambahan;
-        
+
             Room::create($data);
-        
+
             return redirect()
                 ->route(request()->routeIs('admin.rooms.*') ? 'admin.rooms.index' : 'rooms.index')
                 ->with('success', 'Kamar berhasil ditambahkan!');
-        
+
         } catch (\Exception $e) {
             return back()
                 ->withInput()
@@ -103,11 +87,13 @@ class RoomController extends Controller
      */
     public function show(Room $room)
     {
-        $waNumber = $room->kontak_whatsapp ?? '6281264609317';
-        $pesan = 'Halo kak, saya ingin booking kamar ' . $room->nama_kamar . ' di kos ' . $room->lokasi . '. Masih tersedia? Mohon infonya ya, terima kasih.';
-        $waLink = 'https://wa.me/' . $waNumber . '?text=' . urlencode($pesan);
+        $waNumber = '6282180725532';
+        $pesan = "Halo Admin 👋\n\nSaya tertarik dengan KOS GRAHA  *{$room->nama_kamar}* dan ingin melakukan survei lokasi 🏠.\n\nKapan saya bisa berkunjung untuk melihat langsung? 😊\n\nTerima kasih 🙏";
+        $waMessage = rawurlencode($pesan);
+        $waLink = "https://api.whatsapp.com/send/?phone={$waNumber}&text={$waMessage}&type=phone_number&app_absent=0";
         return view('rooms.show', compact('room', 'waLink'));
     }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -126,54 +112,20 @@ class RoomController extends Controller
             'nama_kamar' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'harga_sewa' => 'required|numeric|min:0',
-            'lokasi' => 'required|string',
+            'status' => 'required|in:tersedia,tidak_tersedia',
             'latitude' => 'nullable|string',
             'longitude' => 'nullable|string',
-            'foto_utama' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'foto_tambahan.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'fasilitas' => 'nullable|array',
-            'kontak_whatsapp' => 'nullable|string',
-            'kontak_form' => 'nullable|string'
         ]);
 
         $data = $request->only([
-            'nama_kamar', 'deskripsi', 'harga_sewa', 'lokasi',
-            'latitude', 'longitude', 'fasilitas',
-            'kontak_whatsapp', 'kontak_form'
+            'nama_kamar', 'deskripsi', 'harga_sewa', 'status',
+            'latitude', 'longitude', 'fasilitas'
         ]);
 
-        // Format nomor WhatsApp ke internasional (62...)
-        if (isset($data['kontak_whatsapp'])) {
-            $wa = preg_replace('/[^0-9]/', '', $data['kontak_whatsapp']);
-            if (substr($wa, 0, 1) === '0') {
-                $wa = '62' . substr($wa, 1);
-            }
-            $data['kontak_whatsapp'] = $wa;
-        }
-
-        // Pastikan fasilitas dan foto_tambahan selalu array
+        // Pastikan fasilitas selalu array
         if (!isset($data['fasilitas'])) {
             $data['fasilitas'] = [];
-        }
-
-        // Upload foto utama jika ada
-        if ($request->hasFile('foto_utama')) {
-            $fotoUtama = $request->file('foto_utama');
-            $fotoUtamaPath = $fotoUtama->store('rooms', 'public');
-            $data['foto_utama'] = 'storage/' . $fotoUtamaPath;
-        }
-
-        // Upload foto tambahan jika ada
-        if ($request->hasFile('foto_tambahan')) {
-            $fotoTambahan = [];
-            foreach ($request->file('foto_tambahan') as $foto) {
-                $fotoPath = $foto->store('rooms', 'public');
-                $fotoTambahan[] = 'storage/' . $fotoPath;
-            }
-            $data['foto_tambahan'] = $fotoTambahan;
-        }
-        if (!isset($data['foto_tambahan'])) {
-            $data['foto_tambahan'] = [];
         }
 
         $room->update($data);

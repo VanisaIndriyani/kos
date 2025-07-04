@@ -10,6 +10,19 @@
     </a>
 </div>
 
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 <div class="card shadow-sm">
     <div class="card-body">
         <form action="{{ route('admin.rooms.update', $room) }}" method="POST" enctype="multipart/form-data">
@@ -64,8 +77,6 @@
                         </div>
                     </div>
 
-                 
-
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
@@ -89,23 +100,8 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="kontak_whatsapp" class="form-label">Kontak WhatsApp</label>
-                        <input type="text" class="form-control @error('kontak_whatsapp') is-invalid @enderror" 
-                               id="kontak_whatsapp" name="kontak_whatsapp" value="{{ old('kontak_whatsapp', $room->kontak_whatsapp) }}">
-                        @error('kontak_whatsapp')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
 
-                    <div class="mb-3">
-                        <label for="kontak_form" class="form-label">Kontak Form</label>
-                        <input type="text" class="form-control @error('kontak_form') is-invalid @enderror" 
-                               id="kontak_form" name="kontak_form" value="{{ old('kontak_form', $room->kontak_form) }}">
-                        @error('kontak_form')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+                 
                 </div>
 
                 <div class="col-md-4">
@@ -133,46 +129,6 @@
                         </div>
                         @error('fasilitas')
                             <div class="text-danger small">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="foto_utama" class="form-label">Foto Utama</label>
-                        @if($room->foto_utama && file_exists(public_path($room->foto_utama)))
-                            <div class="mb-2">
-                                <img src="{{ asset($room->foto_utama) }}" alt="Foto Utama" class="img-thumbnail" style="max-width: 200px;">
-                            </div>
-                        @else
-                            <div class="mb-2">
-                                <img src="https://ui-avatars.com/api/?name=Kamar" alt="No Image" class="img-thumbnail" style="max-width: 200px;">
-                            </div>
-                        @endif
-                        <input type="file" class="form-control @error('foto_utama') is-invalid @enderror" 
-                               id="foto_utama" name="foto_utama" accept="image/*">
-                        <div class="form-text">Kosongkan jika tidak ingin mengubah foto</div>
-                        @error('foto_utama')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="foto_tambahan" class="form-label">Foto Tambahan</label>
-                        @if($room->foto_tambahan)
-                            <div class="mb-2">
-                                @foreach($room->foto_tambahan as $index => $foto)
-                                    @if($foto && file_exists(public_path($foto)))
-                                        <img src="{{ asset($foto) }}" alt="Foto {{ $index + 1 }}" class="img-thumbnail me-1" style="max-width: 80px;">
-                                    @else
-                                        <img src="https://ui-avatars.com/api/?name=Kamar" alt="No Image" class="img-thumbnail me-1" style="max-width: 80px;">
-                                    @endif
-                                @endforeach
-                            </div>
-                        @endif
-                        <input type="file" class="form-control @error('foto_tambahan') is-invalid @enderror" 
-                               id="foto_tambahan" name="foto_tambahan[]" accept="image/*" multiple>
-                        <div class="form-text">Kosongkan jika tidak ingin mengubah foto</div>
-                        @error('foto_tambahan')
-                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>

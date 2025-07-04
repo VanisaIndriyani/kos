@@ -50,6 +50,6 @@ class AdminController extends Controller
     public function logout()
     {
         session()->forget('admin_logged_in');
-        return redirect()->route('admin.login');
+        return redirect('/');
     }
 }

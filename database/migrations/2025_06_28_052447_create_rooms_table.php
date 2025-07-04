@@ -20,10 +20,10 @@ return new class extends Migration
             $table->string('lokasi');
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
-            $table->string('foto_utama');
+            $table->string('foto_utama')->nullable();
             $table->json('foto_tambahan')->nullable();
-            $table->json('fasilitas');
-            $table->string('kontak_whatsapp');
+            $table->json('fasilitas')->nullable();
+            $table->string('kontak_whatsapp')->nullable();
             $table->string('kontak_form')->nullable();
             $table->timestamps();
         });

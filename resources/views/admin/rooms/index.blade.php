@@ -78,7 +78,6 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th>Foto</th>
                         <th>Nama Kamar</th>
                         <th>Harga</th>
                         <th>Status</th>
@@ -90,9 +89,6 @@
                 <tbody>
                     @forelse($rooms as $room)
                     <tr>
-                        <td>
-                            <img src="{{ asset($room->foto_utama) }}" alt="foto" width="60" height="40" style="object-fit:cover; border-radius:6px;">
-                        </td>
                         <td class="fw-semibold">{{ $room->nama_kamar }}</td>
                         <td class="text-primary">Rp {{ number_format($room->harga_sewa, 0, ',', '.') }}</td>
                         <td>

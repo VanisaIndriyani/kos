@@ -101,8 +101,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @if(request()->routeIs('admin.messages.*')) active @endif" href="{{ route('admin.messages.index') }}">
-                        <i class="fas fa-envelope me-2"></i>Pesan
+                    <a class="nav-link @if(request()->routeIs('admin.gallery.*')) active @endif" href="{{ route('admin.gallery.index') }}">
+                        <i class="fas fa-images me-2"></i>Galeri
                     </a>
                 </li>
                 <li class="nav-item">
