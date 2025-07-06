@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Models\Message;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -13,15 +14,15 @@ class AdminController extends Controller
         $totalRooms = Room::count();
         $availableRooms = Room::where('status', 'tersedia')->count();
         $fullRooms = Room::where('status', 'penuh')->count();
-        $unreadMessages = Message::where('dibaca', false)->count();
-        $recentMessages = Message::with('room')->orderBy('created_at', 'desc')->take(5)->get();
+        $totalTestimonials = Testimonial::count();
+        $recentTestimonials = Testimonial::orderBy('created_at', 'desc')->take(5)->get();
 
         return view('admin.dashboard', compact(
             'totalRooms',
             'availableRooms',
             'fullRooms',
-            'unreadMessages',
-            'recentMessages'
+            'totalTestimonials',
+            'recentTestimonials'
         ));
     }
 

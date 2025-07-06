@@ -23,7 +23,7 @@ class GalleryAdminController extends Controller
     {
         $request->validate([
             'kategori' => 'required|string|max:50',
-            'foto.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
             'keterangan' => 'nullable|string|max:255',
         ]);
 

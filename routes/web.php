@@ -47,10 +47,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('admin')->group(function () {
         // Dashboard
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-
+        
         // Manajemen kamar
         Route::resource('rooms', RoomController::class);
-
+        
         // Manajemen pesan
         Route::resource('messages', MessageController::class);
         Route::patch('/messages/{message}/mark-read', [MessageController::class, 'markAsRead'])->name('messages.mark-read');

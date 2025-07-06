@@ -104,10 +104,10 @@
         <div class="card dashboard-card h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center">
-                    <i class="fas fa-envelope fa-2x me-3"></i>
+                    <i class="fas fa-star fa-2x me-3"></i>
                     <div>
-                        <h5 class="card-title mb-0">Pesan Baru</h5>
-                        <h2 class="mb-0">{{ $unreadMessages }}</h2>
+                        <h5 class="card-title mb-0">Total Testimoni</h5>
+                        <h2 class="mb-0">{{ $totalTestimonials }}</h2>
                     </div>
                 </div>
             </div>
@@ -117,38 +117,36 @@
 
 <div class="card">
     <div class="card-header bg-light">
-        <h5 class="mb-0"><i class="fas fa-envelope-open-text me-2"></i>Pesan Terbaru</h5>
+        <h5 class="mb-0"><i class="fas fa-star me-2"></i>Testimoni Terbaru</h5>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover mb-0">
                 <thead>
                     <tr>
-                        <th>Nama Pengirim</th>
-                        <th>Kamar</th>
-                        <th>Pesan</th>
-                        <th>Status</th>
+                        <th>Nama</th>
+                        <th>Testimoni</th>
+                        <th>Balasan</th>
                         <th>Tanggal</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($recentMessages as $msg)
+                    @forelse($recentTestimonials as $testimonial)
                     <tr>
-                        <td>{{ $msg->nama_pengirim }}</td>
-                        <td>{{ $msg->room->nama_kamar ?? '-' }}</td>
-                        <td>{{ Str::limit($msg->pesan, 40) }}</td>
+                        <td>{{ $testimonial->nama }}</td>
+                        <td>{{ Str::limit($testimonial->isi, 50) }}</td>
                         <td>
-                            @if($msg->dibaca)
-                                <span class="badge bg-secondary">Dibaca</span>
+                            @if($testimonial->balasan)
+                                <span class="badge bg-success">Sudah Dibalas</span>
                             @else
-                                <span class="badge bg-warning text-dark">Baru</span>
+                                <span class="badge bg-warning text-dark">Belum Dibalas</span>
                             @endif
                         </td>
-                        <td>{{ $msg->created_at->format('d/m/Y H:i') }}</td>
+                        <td>{{ $testimonial->created_at->format('d/m/Y H:i') }}</td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted">Belum ada pesan masuk.</td>
+                        <td colspan="4" class="text-center text-muted">Belum ada testimoni.</td>
                     </tr>
                     @endforelse
                 </tbody>

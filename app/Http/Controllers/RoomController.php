@@ -12,7 +12,16 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $rooms = Room::all();
+        $status = request('status');
+        $query = Room::query();
+
+        if ($status === 'tersedia') {
+            $query->where('status', 'tersedia');
+        } elseif ($status === 'penuh') {
+            $query->where('status', '!=', 'tersedia');
+        }
+
+        $rooms = $query->get();
 
         if (request()->routeIs('admin.rooms.*')) {
             return view('admin.rooms.index', compact('rooms'));
@@ -49,12 +58,12 @@ class RoomController extends Controller
                 'fasilitas' => 'nullable|array',
                 'kontak_whatsapp' => 'nullable|string',
             ]);
-
+        
             $data = $request->only([
                 'nama_kamar', 'deskripsi', 'harga_sewa', 'status',
                 'latitude', 'longitude', 'fasilitas', 'kontak_whatsapp'
             ]);
-
+        
             // Format nomor WhatsApp ke internasional (62...)
             if (!empty($data['kontak_whatsapp'])) {
                 $wa = preg_replace('/[^0-9]/', '', $data['kontak_whatsapp']);
@@ -63,18 +72,18 @@ class RoomController extends Controller
                 }
                 $data['kontak_whatsapp'] = $wa;
             }
-
+        
             // Pastikan fasilitas selalu array
             if (!isset($data['fasilitas'])) {
                 $data['fasilitas'] = [];
             }
-
+        
             Room::create($data);
-
+        
             return redirect()
                 ->route(request()->routeIs('admin.rooms.*') ? 'admin.rooms.index' : 'rooms.index')
                 ->with('success', 'Kamar berhasil ditambahkan!');
-
+        
         } catch (\Exception $e) {
             return back()
                 ->withInput()

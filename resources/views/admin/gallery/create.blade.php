@@ -30,7 +30,7 @@
             <div class="mb-3">
                 <label for="foto" class="form-label">Upload Foto <span class="text-danger">*</span></label>
                 <input type="file" class="form-control @error('foto') is-invalid @enderror" id="foto" name="foto[]" accept="image/*" multiple required>
-                <div class="form-text">Bisa upload beberapa foto sekaligus.</div>
+                <div class="form-text"><br>Maksimal ukuran file: 5 MB per foto.</div>
                 @error('foto')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror

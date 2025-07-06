@@ -65,17 +65,15 @@
                 <i class="fas fa-bed me-2"></i>Daftar Kamar Kos
             </h1>
             <div class="d-flex gap-2 flex-wrap mb-4">
-                <button id="filter-all" class="btn btn-outline-primary filter-btn active" onclick="filterRooms('all', this)">
-            <div class="d-flex gap-2">
-                <button id="filter-all" class="btn btn-outline-primary active" onclick="filterRooms('all', this)">
+                <a href="{{ route('home') }}" class="btn btn-outline-primary filter-btn{{ request('status') === null ? ' active' : '' }}" id="filter-all">
                     <i class="fas fa-list me-1"></i>Semua
-                </button>
-                <button id="filter-tersedia" class="btn btn-outline-success" onclick="filterRooms('tersedia', this)">
+                </a>
+                <a href="{{ route('home', ['status' => 'tersedia']) }}" class="btn btn-outline-success filter-btn{{ request('status') === 'tersedia' ? ' active' : '' }}" id="filter-tersedia">
                     <i class="fas fa-check me-1"></i>Tersedia
-                </button>
-                <button id="filter-penuh" class="btn btn-outline-danger" onclick="filterRooms('penuh', this)">
+                </a>
+                <a href="{{ route('home', ['status' => 'penuh']) }}" class="btn btn-outline-danger filter-btn{{ request('status') === 'penuh' ? ' active' : '' }}" id="filter-penuh">
                     <i class="fas fa-times me-1"></i>Penuh
-                </button>
+                </a>
             </div>
         </div>
     </div>
@@ -83,7 +81,7 @@
 
 <div class="row" id="rooms-container">
     @forelse($rooms as $room)
-    <div class="col-12 col-sm-6 col-lg-4 mb-4 d-flex align-items-stretch">
+    <div class="col-12 col-sm-6 col-lg-4 mb-4 d-flex align-items-stretch room-card" data-status="{{ $room->status }}">
         <div class="card shadow-sm w-100 h-100" style="background: linear-gradient(135deg, #fffaf4 60%, #f7e9d2 100%); border-radius: 1rem;">
             <div class="position-relative">
                 <span class="badge status-badge position-absolute top-0 end-0 m-2 {{ $room->status === 'tersedia' ? 'bg-success' : 'bg-danger' }}">
@@ -157,21 +155,5 @@
 @endsection
 
 @section('scripts')
-<script>
-function filterRooms(status, btn) {
-    const cards = document.querySelectorAll('.room-card');
-    cards.forEach(card => {
-        if (status === 'all' || (status === 'tersedia' && card.dataset.status === 'tersedia') || (status === 'penuh' && card.dataset.status !== 'tersedia')) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-    });
-    // Atur tombol aktif
-    document.getElementById('filter-all').classList.remove('active');
-    document.getElementById('filter-tersedia').classList.remove('active');
-    document.getElementById('filter-penuh').classList.remove('active');
-    btn.classList.add('active');
-}
-</script>
+{{-- Script filterRooms sudah tidak diperlukan karena filter sekarang pakai backend --}}
 @endsection 
